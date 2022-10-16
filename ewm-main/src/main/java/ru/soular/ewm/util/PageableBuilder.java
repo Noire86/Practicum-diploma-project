@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import ru.soular.ewm.exception.model.ValidationException;
 
-public class PaginationBuilder {
+public class PageableBuilder {
 
     public static Pageable build(Integer from, Integer size) {
         if (from == null && size == null) return Pageable.unpaged();

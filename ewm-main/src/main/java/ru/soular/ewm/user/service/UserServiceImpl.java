@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.soular.ewm.user.dao.UserDAO;
 import ru.soular.ewm.user.dto.UserDto;
 import ru.soular.ewm.user.model.User;
-import ru.soular.ewm.util.PaginationBuilder;
+import ru.soular.ewm.util.PageableBuilder;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -56,11 +56,11 @@ public class UserServiceImpl implements UserService {
         List<User> result;
 
         if (ids != null && ids.size() > 0) {
-            log.info("Getting info about users: [{}]", ids);
-            result = userDAO.findAllByIdIn(ids, PaginationBuilder.build(from, size));
+            log.info("Getting info about users: {}", ids);
+            result = userDAO.findAllByIdIn(ids, PageableBuilder.build(from, size));
         } else {
             log.info("Getting info about all users");
-            result = userDAO.findAll(PaginationBuilder.build(from, size)).getContent();
+            result = userDAO.findAll(PageableBuilder.build(from, size)).getContent();
         }
 
         return result.stream()

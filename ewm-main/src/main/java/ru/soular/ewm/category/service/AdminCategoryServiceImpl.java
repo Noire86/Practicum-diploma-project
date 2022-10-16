@@ -41,6 +41,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     @Override
     public void delete(Long id) {
         log.info("Removing category ID: " + id);
-        categoryDAO.deleteById(id);
+        Category cat = categoryDAO.getReferenceById(id);
+        categoryDAO.delete(cat);
     }
 }

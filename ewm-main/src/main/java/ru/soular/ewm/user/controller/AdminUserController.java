@@ -23,6 +23,13 @@ public class AdminUserController  {
         return new ResponseEntity<>(service.create(userDto), HttpStatus.OK);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserDto> update(
+            @PathVariable Long id,
+            @RequestBody @Validated UserDto userDto) {
+        return new ResponseEntity<>(service.update(id, userDto), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
@@ -35,12 +42,5 @@ public class AdminUserController  {
             @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
 
         return new ResponseEntity<>(service.getAll(ids, from, size), HttpStatus.OK);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> update(
-            @PathVariable Long id,
-            @RequestBody @Validated UserDto userDto) {
-        return new ResponseEntity<>(service.update(id, userDto), HttpStatus.OK);
     }
 }

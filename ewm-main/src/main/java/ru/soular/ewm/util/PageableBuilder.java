@@ -11,11 +11,11 @@ public class PageableBuilder {
         if (from == null && size == null) return Pageable.unpaged();
 
         if (from == null || from < 0) {
-            throw new ValidationException("Invalid starting pagination parameter!", HttpStatus.BAD_REQUEST);
+            throw new ValidationException("Invalid starting pagination parameter!");
         }
 
         if (size == null || size < 1) {
-            throw new ValidationException("Invalid page amount pagination parameter!", HttpStatus.BAD_REQUEST);
+            throw new ValidationException("Invalid page amount pagination parameter!");
         }
 
         return PageRequest.of(from / size, size);

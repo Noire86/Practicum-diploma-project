@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 /**
  * Исключение валидации сущностей
  */
-public class ValidationException extends CommonAppException {
+public class ValidationException extends RuntimeException {
 
     private BindingResult errors;
+    private String message;
 
-    public ValidationException(String message, HttpStatus code) {
-        super(message, code);
+    public ValidationException(String message) {
+        this.message = message;
     }
 
-    public ValidationException(BindingResult errors, HttpStatus code) {
-        super(null, code);
+    public ValidationException(BindingResult errors) {
         this.errors = errors;
     }
 
@@ -31,16 +31,15 @@ public class ValidationException extends CommonAppException {
                     .map(ValidationException::getValidationMessage)
                     .collect(Collectors.toList());
         } else {
-            return List.of(super.getMessage());
+            return List.of(message);
         }
     }
 
-    @Override
     public String getMessage() {
-        if (super.getMessage() == null) {
+        if (message == null) {
             return String.join(" ", this.getMessages());
         }
-        return super.getMessage();
+        return message;
     }
 
     private static String getValidationMessage(ObjectError error) {

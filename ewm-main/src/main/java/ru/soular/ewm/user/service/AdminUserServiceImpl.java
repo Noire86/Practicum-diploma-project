@@ -48,7 +48,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public void delete(Long id) {
         log.info("Removing user with ID: {}", id);
-        userDAO.deleteById(id);
+        User user = userDAO.getReferenceById(id);
+        userDAO.delete(user);
     }
 
     @Override

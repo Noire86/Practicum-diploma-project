@@ -27,8 +27,7 @@ public class AdminCategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return new ResponseEntity<>(String.format("Category ID: %d was deleted!", id), HttpStatus.OK);
     }
 }

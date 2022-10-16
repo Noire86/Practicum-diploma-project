@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AdminUserServiceImpl implements AdminUserService {
 
     private final UserDAO userDAO;
     private final ModelMapper mapper;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(Long id, UserDto userDto) {
-        User user = userDAO.findById(id).orElseThrow(EntityNotFoundException::new);
+        User user = userDAO.getReferenceById(id);
 
         if (userDto.getName() != null) {
             user.setName(userDto.getName());

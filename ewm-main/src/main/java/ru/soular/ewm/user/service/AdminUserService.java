@@ -4,7 +4,7 @@ import ru.soular.ewm.user.dto.UserDto;
 
 import java.util.List;
 
-public interface UserService {
+public interface AdminUserService {
     UserDto create(UserDto userDto);
 
     UserDto update(Long id, UserDto userDto);

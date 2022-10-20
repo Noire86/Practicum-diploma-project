@@ -2,22 +2,19 @@ package ru.soular.ewm.util;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import ru.soular.ewm.exception.model.ValidationException;
+import org.springframework.data.domain.Sort;
 
 public class PageableBuilder {
 
     public static Pageable build(Integer from, Integer size) {
-        if (from == null && size == null) return Pageable.unpaged();
+        return build(from, size, Sort.unsorted());
+    }
 
-        if (from == null || from < 0) {
-            throw new ValidationException("Invalid starting pagination parameter!");
+    public static Pageable build(Integer from, Integer size, Sort sort) {
+        if (from != null && size != null) {
+            return PageRequest.of(from / size, size, sort);
         }
 
-        if (size == null || size < 1) {
-            throw new ValidationException("Invalid page amount pagination parameter!");
-        }
-
-        return PageRequest.of(from / size, size);
+        return Pageable.unpaged();
     }
 }

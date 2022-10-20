@@ -9,7 +9,6 @@ import ru.soular.ewm.category.dto.CategoryDto;
 import ru.soular.ewm.category.model.Category;
 import ru.soular.ewm.util.PageableBuilder;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
     @Override
     public CategoryDto get(Long id) {
         log.info("Getting category with ID:{}", id);
-        Category category = categoryDAO.getReferenceById(id);
+        Category category = categoryDAO.findEntityById(id);
         return mapper.map(category, CategoryDto.class);
     }
 

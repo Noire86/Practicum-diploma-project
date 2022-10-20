@@ -11,9 +11,9 @@ import java.util.List;
 @Data
 @Builder
 public class ExceptionResponse {
+    private List<String> errors;
     private String status;
     private String reason;
     private String message;
     private String timestamp;
-    private List<String> errors;
 }

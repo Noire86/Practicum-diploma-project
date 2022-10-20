@@ -9,7 +9,6 @@ import ru.soular.ewm.user.dto.UserDto;
 import ru.soular.ewm.user.model.User;
 import ru.soular.ewm.util.PageableBuilder;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public UserDto update(Long id, UserDto userDto) {
-        User user = userDAO.getReferenceById(id);
+        User user = userDAO.findEntityById(id);
 
         if (userDto.getName() != null) {
             user.setName(userDto.getName());
@@ -48,7 +47,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public void delete(Long id) {
         log.info("Removing user with ID: {}", id);
-        User user = userDAO.getReferenceById(id);
+        User user = userDAO.findEntityById(id);
         userDAO.delete(user);
     }
 

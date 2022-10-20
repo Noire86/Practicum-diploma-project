@@ -9,8 +9,6 @@ import ru.soular.ewm.category.dto.CategoryDto;
 import ru.soular.ewm.category.dto.NewCategoryDto;
 import ru.soular.ewm.category.model.Category;
 
-import javax.persistence.EntityNotFoundException;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
 
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
-        Category category = categoryDAO.getReferenceById(categoryDto.getId());
+        Category category = categoryDAO.findEntityById(categoryDto.getId());
 
         if (categoryDto.getName() != null) {
             category.setName(categoryDto.getName());
@@ -41,7 +39,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     @Override
     public void delete(Long id) {
         log.info("Removing category ID: " + id);
-        Category cat = categoryDAO.getReferenceById(id);
+        Category cat = categoryDAO.findEntityById(id);
         categoryDAO.delete(cat);
     }
 }

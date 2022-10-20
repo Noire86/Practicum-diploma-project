@@ -1,8 +1,8 @@
 package ru.soular.ewm.category.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import ru.soular.ewm.category.model.Category;
+import ru.soular.ewm.util.jpa.CustomJpaRepository;
 
-public interface CategoryDAO extends JpaRepository<Category, Long> {
+public interface CategoryDAO extends CustomJpaRepository<Category, Long> {
 
 }

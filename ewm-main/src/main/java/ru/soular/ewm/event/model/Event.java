@@ -3,6 +3,7 @@ package ru.soular.ewm.event.model;
 import lombok.Getter;
 import lombok.Setter;
 import ru.soular.ewm.category.model.Category;
+import ru.soular.ewm.compilation.model.Compilation;
 import ru.soular.ewm.user.model.User;
 import ru.soular.ewm.util.EventState;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -71,4 +73,7 @@ public class Event {
 
     @Column(name = "location_lon")
     private Double locationLon;
+
+    @ManyToMany(mappedBy = "events")
+    private List<Compilation> compilations;
 }

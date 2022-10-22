@@ -20,7 +20,7 @@ public class PublicCompilationController {
 
     @GetMapping
     public ResponseEntity<List<CompilationDto>> getAll(
-            @RequestParam Boolean pinned,
+            @RequestParam(required = false, defaultValue = "false") Boolean pinned,
             @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
             @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
 

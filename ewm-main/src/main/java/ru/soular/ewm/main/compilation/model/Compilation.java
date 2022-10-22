@@ -2,7 +2,6 @@ package ru.soular.ewm.main.compilation.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import ru.soular.ewm.main.event.model.Event;
 
 import javax.persistence.*;
@@ -12,8 +11,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString
-@Table(name = "event_compilation", schema = "public")
+@Table(name = "compilations", schema = "public")
 public class Compilation {
 
     @Id
@@ -27,7 +25,7 @@ public class Compilation {
     private Boolean pinned;
 
     @ManyToMany
-    @JoinTable(name = "compilation_event",
+    @JoinTable(name = "event_compilation",
             joinColumns = @JoinColumn(name = "compilation_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> events;

@@ -13,6 +13,4 @@ public interface EndpointHitDAO extends CustomJpaRepository<EndpointHit, Long> {
             "and hit.timestamp > ?2 " +
             "and hit.timestamp < ?3")
     List<EndpointHit> getEndpointHitsBy(String uri, LocalDateTime start, LocalDateTime end);
-
-    List<EndpointHit> getAllByUri(String uri);
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.compilation.dao.CompilationDAO;
 import ru.soular.ewm.main.compilation.dto.CompilationDto;
 import ru.soular.ewm.main.compilation.dto.NewCompilationDto;
@@ -23,6 +24,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     private final CompilationDAO compilationDAO;
     private final ModelMapper mapper;
     private final EventDAO eventDAO;
+    private final StatsClient statsClient;
 
     @Override
     public CompilationDto create(NewCompilationDto newCompilationDto) {
@@ -33,7 +35,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
                 .stream()
                 .map(event -> mapper.map(event, EventShortDto.class))
                 .collect(Collectors.toList());
-        //TODO добавить проставление просмотров
+        events.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
 
         log.info("Creating new compilation with data={}", newCompilationDto);
         return mapper.map(compilationDAO.save(compilation), CompilationDto.class)

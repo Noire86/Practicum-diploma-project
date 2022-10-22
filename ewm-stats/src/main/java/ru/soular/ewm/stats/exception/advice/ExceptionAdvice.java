@@ -78,7 +78,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<Object> handleEventException(ApplicationException ex) {
+    public ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .status(ex.getCode().name())
                 .reason("For the requested operation the conditions are not met.")

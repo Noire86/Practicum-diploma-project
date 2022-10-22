@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import ru.soular.ewm.main.client.dto.EndpointHitDto;
+import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.EventFullDto;
 import ru.soular.ewm.main.event.dto.EventShortDto;
@@ -28,6 +30,7 @@ public class PublicEventServiceImpl implements PublicEventService {
 
     private final EventDAO eventDAO;
     private final ModelMapper mapper;
+    private final StatsClient statsClient;
 
     @Override
     public List<EventShortDto> getEvents(String text, List<Long> categoryIds, Boolean paid, String rangeStart,
@@ -56,9 +59,15 @@ public class PublicEventServiceImpl implements PublicEventService {
                 result.sort(Comparator.comparing(EventShortDto::getViews));
                 break;
         }
+        result.forEach(dto -> dto.setViews(statsClient.getViews(dto.getId())));
+        statsClient.createEndpointHit(EndpointHitDto.builder()
+                .app("Explore With Me")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
+
         log.info("Getting all published events sorted by {}, availableOnly={}", sort.name(), onlyAvailable);
-        //TODO добавить проставление просмотров события
-        //TODO добавить отправку статистики
         return result;
     }
 
@@ -71,8 +80,15 @@ public class PublicEventServiceImpl implements PublicEventService {
         }
 
         EventFullDto result = mapper.map(event, EventFullDto.class);
-        //TODO добавить проставление просмотров события
-        //TODO добавить отправку статистики
+        result.setViews(statsClient.getViews(event.getId()));
+
+        statsClient.createEndpointHit(EndpointHitDto.builder()
+                .app("Explore With Me")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
+
         log.info("Getting event by id={}", id);
         return result;
     }

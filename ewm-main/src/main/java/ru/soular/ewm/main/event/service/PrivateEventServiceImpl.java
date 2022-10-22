@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.category.dao.CategoryDAO;
 import ru.soular.ewm.main.category.model.Category;
+import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.EventFullDto;
 import ru.soular.ewm.main.event.dto.EventShortDto;
@@ -39,6 +40,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     private final EventDAO eventDAO;
     private final UserDAO userDAO;
 
+    private final StatsClient statsClient;
+
     @Override
     public List<EventShortDto> getEvents(Long userId, Integer from, Integer size) {
         User user = userDAO.findEntityById(userId);
@@ -47,7 +50,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .map(event -> mapper.map(event, EventShortDto.class))
                 .collect(Collectors.toList());
 
-        //TODO Добавить проставление просмотров
+        events.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
         log.info("Getting all events by user ID:{}", userId);
         return events;
     }
@@ -81,8 +84,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         if (req.getParticipantLimit() != null) event.setParticipantLimit(req.getParticipantLimit());
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
+        result.setViews(statsClient.getViews(event.getId()));
 
-        //TODO Добавить проставление просмотров
         log.info("Updating event ID:{} with data={}", req.getEventId(), req);
         return result;
     }
@@ -113,8 +116,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         }
 
         EventFullDto result = mapper.map(eventDAO.findEntityById(eventId), EventFullDto.class);
+        result.setViews(statsClient.getViews(event.getId()));
 
-        //TODO Добавить проставление просмотров
         log.info("Getting event ID:{} by user ID:{}", eventId, userId);
         return result;
     }
@@ -136,7 +139,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         event.setState(EventState.CANCELLED);
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
-        //TODO Добавить проставление просмотров
+        result.setViews(statsClient.getViews(event.getId()));
         log.info("Cancelling event ID:{} by user ID:{}", eventId, userId);
         return result;
     }

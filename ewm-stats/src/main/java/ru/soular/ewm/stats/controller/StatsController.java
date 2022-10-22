@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin/events")
+@RequestMapping
 public class StatsController {
 
     private final StatsService service;

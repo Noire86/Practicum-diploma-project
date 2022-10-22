@@ -32,7 +32,7 @@ public class StatsServiceImpl implements StatsService {
         EndpointHit hit = mapper.map(endpointHitDto, EndpointHit.class);
         log.info("Creating new EndpointHit data={}", endpointHitDto);
 
-        return mapper.map(hit, EndpointHitDto.class);
+        return mapper.map(hitDAO.save(hit), EndpointHitDto.class);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class StatsServiceImpl implements StatsService {
             if (!hits.isEmpty()) {
                 ViewStatsDto stats = ViewStatsDto.builder()
                         .uri(uri)
-                        .app(hits.stream().map(EndpointHit::getApp).distinct().toString())
+                        .app(hits.stream().map(EndpointHit::getApp).distinct().findAny().orElse(null))
                         .hits(unique ? hits.stream().map(EndpointHit::getIp).distinct().count() : hits.size())
                         .build();
 

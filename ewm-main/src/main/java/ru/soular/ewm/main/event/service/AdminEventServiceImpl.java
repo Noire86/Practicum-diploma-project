@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.category.dao.CategoryDAO;
+import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.AdminUpdateEventRequest;
 import ru.soular.ewm.main.event.dto.EventFullDto;
@@ -28,6 +29,8 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final CategoryDAO categoryDAO;
     private final ModelMapper mapper;
 
+    private final StatsClient statsClient;
+
     @Override
     public List<EventFullDto> getEvents(List<Long> userIds, List<EventState> states, List<Long> categoryIds,
                                         String rangeStart, String rangeEnd, Integer from, Integer size) {
@@ -40,7 +43,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                 .collect(Collectors.toList());
 
 
-        //TODO добавить проставление просмотров события
+        result.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
         log.info("Getting all events as an administrator");
         return result;
     }
@@ -63,7 +66,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
-        //TODO добавить проставку просмотров
+        result.setViews(statsClient.getViews(event.getId()));
         log.info("Updating Event ID: {} with new data={}", id, dto);
         return result;
     }
@@ -86,7 +89,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         event.setState(EventState.PUBLISHED);
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
-        //TODO добавить проставку просмотров
+        result.setViews(statsClient.getViews(event.getId()));
         log.info("Publishing new Event ID:{} by an Administrator", id);
         return result;
     }
@@ -102,7 +105,7 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         event.setState(EventState.REJECTED);
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
-        //TODO добавить проставку просмотров
+        result.setViews(statsClient.getViews(event.getId()));
         log.info("Publishing new Event ID:{} by an Administrator", id);
         return result;
     }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.compilation.dao.CompilationDAO;
 import ru.soular.ewm.main.compilation.dto.CompilationDto;
 import ru.soular.ewm.main.compilation.model.Compilation;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 public class PublicCompilationServiceImpl implements PublicCompilationService {
 
     private final CompilationDAO compilationDAO;
+
+    private final StatsClient statsClient;
     private final ModelMapper mapper;
 
     @Override
@@ -44,7 +47,7 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
                 .map(event -> mapper.map(event, EventShortDto.class))
                 .collect(Collectors.toList());
 
-        //TODO проставить просмотры
+        events.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
         return mapper.map(compilation, CompilationDto.class).toBuilder()
                 .events(events)
                 .build();

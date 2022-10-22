@@ -81,7 +81,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .status(ex.getCode().name())
-                .reason("For the requested operation the conditions are not met.")
+                .reason("Stats service application exception")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
                 .build();

@@ -79,12 +79,12 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
-        ExceptionResponse response = ExceptionResponse.builder()
+        ExceptionResponse response = ex.getResponse() == null ? ExceptionResponse.builder()
                 .status(ex.getCode().name())
                 .reason("For the requested operation the conditions are not met.")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
-                .build();
+                .build() : ex.getResponse();
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
         return new ResponseEntity<>(response, ex.getCode());

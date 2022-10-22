@@ -8,7 +8,6 @@ import ru.soular.ewm.stats.dao.EndpointHitDAO;
 import ru.soular.ewm.stats.dto.EndpointHitDto;
 import ru.soular.ewm.stats.dto.ViewStatsDto;
 import ru.soular.ewm.stats.model.EndpointHit;
-import ru.soular.ewm.stats.util.Constants;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static ru.soular.ewm.stats.util.Constants.*;
+import static ru.soular.ewm.stats.util.Constants.FORMATTER;
 
 @Slf4j
 @Service

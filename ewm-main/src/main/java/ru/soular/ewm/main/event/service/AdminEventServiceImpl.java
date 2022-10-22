@@ -18,6 +18,7 @@ import ru.soular.ewm.main.util.PageableBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -80,7 +81,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (!event.getState().equals(EventState.PENDING)) {
+        if (!Objects.equals(event.getState(), EventState.PENDING)) {
             throw new ApplicationException("Only pending events can be published",
                     HttpStatus.BAD_REQUEST);
         }
@@ -98,12 +99,12 @@ public class AdminEventServiceImpl implements AdminEventService {
     public EventFullDto reject(Long id) {
         Event event = eventDAO.findEntityById(id);
 
-        if (event.getState() != EventState.PUBLISHED) {
-            throw new ApplicationException("Only pending event can be rejected",
+        if (Objects.equals(event.getState(), EventState.PUBLISHED)) {
+            throw new ApplicationException("Only unpublished event can be rejected",
                     HttpStatus.BAD_REQUEST);
         }
 
-        event.setState(EventState.REJECTED);
+        event.setState(EventState.CANCELED);
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
         log.info("Publishing new Event ID:{} by an Administrator", id);

@@ -16,7 +16,6 @@ import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.EventState;
 import ru.soular.ewm.main.util.RequestStatus;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -68,7 +67,6 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
         ParticipationRequest req = new ParticipationRequest();
         req.setEvent(event);
         req.setRequester(user);
-        req.setCreated(LocalDateTime.now());
         req.setStatus(event.getRequestModeration() ? RequestStatus.PENDING : RequestStatus.CONFIRMED);
 
         event.setConfirmedRequests(event.getConfirmedRequests() + 1);

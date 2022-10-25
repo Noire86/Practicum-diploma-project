@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.soular.ewm.main.category.dto.CategoryDto;
 import ru.soular.ewm.main.category.dto.NewCategoryDto;
 import ru.soular.ewm.main.category.service.AdminCategoryService;
+import ru.soular.ewm.main.category.validation.CategoryUpdate;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class AdminCategoryController {
     }
 
     @PatchMapping
-    public ResponseEntity<CategoryDto> update(@RequestBody @Validated CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> update(@RequestBody @Validated(CategoryUpdate.class) CategoryDto categoryDto) {
         return new ResponseEntity<>(service.update(categoryDto), HttpStatus.OK);
     }
 

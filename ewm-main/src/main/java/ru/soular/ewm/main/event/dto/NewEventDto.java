@@ -22,7 +22,7 @@ public class NewEventDto {
     @NotNull
     private Long category;
 
-    @NotNull
+    @NotBlank
     private String description;
 
     @NotNull

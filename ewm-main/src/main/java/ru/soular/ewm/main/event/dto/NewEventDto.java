@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.soular.ewm.main.event.model.Location;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -15,10 +16,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class NewEventDto {
-    @NotNull
+    @NotBlank
     private String annotation;
 
-    @NotNull
+    @NotBlank
     private Long category;
 
     @NotNull

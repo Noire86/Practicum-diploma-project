@@ -1,4 +1,4 @@
-package ru.soular.ewm.main;
+package ru.soular.ewm.main.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

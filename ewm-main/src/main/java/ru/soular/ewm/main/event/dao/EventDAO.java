@@ -39,4 +39,6 @@ public interface EventDAO extends CustomJpaRepository<Event, Long> {
                                        LocalDateTime rangeEnd, Pageable pageable);
 
     List<Event> getEventsByInitiator(User initiator, Pageable pageable);
+
+    List<Event> getEventsByCategory_Id(Long category_id);
 }

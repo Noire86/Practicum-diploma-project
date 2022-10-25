@@ -48,7 +48,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     @Override
     public void delete(Long compId) {
         log.info("Deleting compilation ID:{}", compId);
-        compilationDAO.delete(compilationDAO.findEntityById(compId));
+        if (compilationDAO.existsById(compId)) compilationDAO.deleteById(compId);
     }
 
     @Override

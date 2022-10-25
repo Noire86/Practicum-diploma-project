@@ -46,7 +46,6 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
 
         if (eventDAO.getEventsByCategory_Id(id).size() > 0) {
             throw new ApplicationException("Unable to delete a category with any associated events!", HttpStatus.FORBIDDEN);
-
         }
 
         if (categoryDAO.existsById(id)) categoryDAO.deleteById(id);

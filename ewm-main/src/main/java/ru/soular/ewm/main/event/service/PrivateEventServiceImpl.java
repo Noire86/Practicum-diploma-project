@@ -51,6 +51,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .collect(Collectors.toList());
 
         events.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
+        events.forEach(event -> event.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId())));
         log.info("Getting all events by user ID:{}", userId);
         return events;
     }
@@ -85,7 +86,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
-
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
         log.info("Updating event ID:{} with data={}", req.getEventId(), req);
         return result;
     }
@@ -100,7 +101,6 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         event.setCategory(category);
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
-        event.setConfirmedRequests(0);
 
         log.info("Creating new Event with data={}", event);
         return mapper.map(eventDAO.save(event), EventFullDto.class);
@@ -118,7 +118,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         EventFullDto result = mapper.map(eventDAO.findEntityById(eventId), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
-
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
         log.info("Getting event ID:{} by user ID:{}", eventId, userId);
         return result;
     }
@@ -141,6 +141,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
         log.info("Cancelling event ID:{} by user ID:{}", eventId, userId);
         return result;
     }
@@ -175,22 +176,19 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                     HttpStatus.FORBIDDEN);
         }
 
-        if (Boolean.FALSE.equals(event.getRequestModeration()) || Objects.equals(event.getParticipantLimit(), 0)) {
+        if (Boolean.FALSE.equals(event.getRequestModeration()) || Objects.equals(event.getParticipantLimit(), 0L)) {
             throw new ApplicationException("Confirming of this request is not necessary", HttpStatus.BAD_REQUEST);
         }
 
-        if (Objects.equals(event.getParticipantLimit(), event.getConfirmedRequests())) {
+        if (Objects.equals(event.getParticipantLimit(), requestDAO.countConfirmedRequests(event.getId()))) {
             throw new ApplicationException("Cannot confirm this request: limit of participants is exceeded", HttpStatus.FORBIDDEN);
         }
 
         request.setStatus(RequestStatus.CONFIRMED);
         ParticipationRequestDto result = mapper.map(requestDAO.save(request), ParticipationRequestDto.class);
 
-        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-        Event savedEvent = eventDAO.save(event);
-
-        if (Objects.equals(savedEvent.getParticipantLimit(), savedEvent.getConfirmedRequests())) {
-            requestDAO.getAllByEventAndStatus(savedEvent, RequestStatus.PENDING)
+        if (Objects.equals(event.getParticipantLimit(), requestDAO.countConfirmedRequests(event.getId()))) {
+            requestDAO.getAllByEventAndStatus(event, RequestStatus.PENDING)
                     .forEach(req -> {
                         req.setStatus(RequestStatus.REJECTED);
                         requestDAO.save(req);
@@ -213,9 +211,6 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         request.setStatus(RequestStatus.REJECTED);
         ParticipationRequestDto result = mapper.map(requestDAO.save(request), ParticipationRequestDto.class);
-
-        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-        eventDAO.save(event);
 
         log.info("Rejecting participation request ID:{} for event ID:{} by user ID:{}", requestId, eventId, userId);
         return result;

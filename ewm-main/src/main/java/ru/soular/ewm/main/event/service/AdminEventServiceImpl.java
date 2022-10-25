@@ -12,6 +12,7 @@ import ru.soular.ewm.main.event.dto.AdminUpdateEventRequest;
 import ru.soular.ewm.main.event.dto.EventFullDto;
 import ru.soular.ewm.main.event.model.Event;
 import ru.soular.ewm.main.exception.model.ApplicationException;
+import ru.soular.ewm.main.participation.dao.ParticipationRequestDAO;
 import ru.soular.ewm.main.util.Constants;
 import ru.soular.ewm.main.util.EventState;
 import ru.soular.ewm.main.util.PageableBuilder;
@@ -29,6 +30,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final EventDAO eventDAO;
     private final CategoryDAO categoryDAO;
     private final ModelMapper mapper;
+    private final ParticipationRequestDAO requestDAO;
 
     private final StatsClient statsClient;
 
@@ -45,6 +47,7 @@ public class AdminEventServiceImpl implements AdminEventService {
 
 
         result.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
+        result.forEach(event -> event.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId())));
         log.info("Getting all events as an administrator");
         return result;
     }
@@ -68,6 +71,7 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(result.getId()));
         log.info("Updating Event ID: {} with new data={}", id, dto);
         return result;
     }
@@ -91,6 +95,7 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
         log.info("Publishing new Event ID:{} by an Administrator", id);
         return result;
     }
@@ -107,6 +112,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         event.setState(EventState.CANCELED);
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
         log.info("Publishing new Event ID:{} by an Administrator", id);
         return result;
     }

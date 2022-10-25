@@ -48,15 +48,12 @@ public class Event {
     @JoinColumn(name = "initiator_id")
     private User initiator;
 
-    @Column(name = "confirmed_requests")
-    private Integer confirmedRequests;
-
     @Column
     private Boolean paid;
 
-    @PositiveOrZero
     @Column(name = "participant_limit")
-    private Integer participantLimit;
+    @PositiveOrZero
+    private Long participantLimit;
 
     @Column(name = "published")
     private LocalDateTime publishedOn;

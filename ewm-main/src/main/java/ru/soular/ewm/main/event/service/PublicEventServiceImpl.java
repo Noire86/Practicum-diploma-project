@@ -12,6 +12,7 @@ import ru.soular.ewm.main.event.dto.EventFullDto;
 import ru.soular.ewm.main.event.dto.EventShortDto;
 import ru.soular.ewm.main.event.model.Event;
 import ru.soular.ewm.main.exception.model.ApplicationException;
+import ru.soular.ewm.main.participation.dao.ParticipationRequestDAO;
 import ru.soular.ewm.main.util.Constants;
 import ru.soular.ewm.main.util.EventSort;
 import ru.soular.ewm.main.util.EventState;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class PublicEventServiceImpl implements PublicEventService {
 
     private final EventDAO eventDAO;
+    private final ParticipationRequestDAO requestDAO;
     private final ModelMapper mapper;
     private final StatsClient statsClient;
 
@@ -60,6 +62,7 @@ public class PublicEventServiceImpl implements PublicEventService {
                 break;
         }
         result.forEach(dto -> dto.setViews(statsClient.getViews(dto.getId())));
+        result.forEach(dto -> dto.setConfirmedRequests(requestDAO.countConfirmedRequests(dto.getId())));
         statsClient.createEndpointHit(EndpointHitDto.builder()
                 .app("Explore With Me")
                 .uri(request.getRequestURI())
@@ -81,7 +84,7 @@ public class PublicEventServiceImpl implements PublicEventService {
 
         EventFullDto result = mapper.map(event, EventFullDto.class);
         result.setViews(statsClient.getViews(event.getId()));
-
+        result.setConfirmedRequests(requestDAO.countConfirmedRequests(result.getId()));
         statsClient.createEndpointHit(EndpointHitDto.builder()
                 .app("Explore With Me")
                 .uri(request.getRequestURI())

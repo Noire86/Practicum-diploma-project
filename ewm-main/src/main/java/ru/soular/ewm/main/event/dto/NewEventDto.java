@@ -9,6 +9,7 @@ import ru.soular.ewm.main.event.model.Location;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,8 +35,10 @@ public class NewEventDto {
 
     @NotBlank
     private String title;
-
     private Boolean paid;
+
+    @PositiveOrZero
     private Integer participantLimit;
+
     private Boolean requestModeration;
 }

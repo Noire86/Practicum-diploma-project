@@ -3,6 +3,8 @@ package ru.soular.ewm.main.exception.advice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @Override
@@ -88,18 +91,5 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
         return new ResponseEntity<>(response, ex.getCode());
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ResponseEntity<Object> handleThrowable(Throwable ex) {
-        ExceptionResponse response = ExceptionResponse.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
-                .reason("Internal server error")
-                .message(ex.getMessage())
-                .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
-                .build();
-
-        log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -59,7 +59,7 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
             throw new ApplicationException("Cannot create a request for an unpublished event!", HttpStatus.FORBIDDEN);
         }
 
-        if (event.getParticipantLimit() > 0 && Objects.equals(event.getParticipantLimit(), event.getConfirmedRequests())) {
+        if (event.getParticipantLimit() > 0 && Objects.equals(event.getParticipantLimit(), requestDAO.countConfirmedRequests(eventId))) {
             throw new ApplicationException("Cannot create a request for this event: limit of participants have been reached!",
                     HttpStatus.FORBIDDEN);
         }
@@ -68,9 +68,6 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
         req.setEvent(event);
         req.setRequester(user);
         req.setStatus(event.getRequestModeration() ? RequestStatus.PENDING : RequestStatus.CONFIRMED);
-
-        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
-        eventDAO.save(event);
 
         log.info("Creating participation request by user ID:{} for event ID:{}", userId, eventId);
         return mapper.map(requestDAO.save(req), ParticipationRequestDto.class);
@@ -81,16 +78,10 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
     public ParticipationRequestDto cancel(Long userId, Long requestId) {
         User user = userDAO.findEntityById(userId);
         ParticipationRequest request = requestDAO.findEntityById(requestId);
-        Event event = request.getEvent();
 
         if (!Objects.equals(request.getRequester(), user)) {
             throw new ApplicationException("Cannot cancel a request: this user is not an author of this request!",
                     HttpStatus.FORBIDDEN);
-        }
-
-        if (Objects.equals(request.getStatus(), RequestStatus.CONFIRMED)) {
-            event.setConfirmedRequests(event.getConfirmedRequests() - 1);
-            eventDAO.save(event);
         }
 
         request.setStatus(RequestStatus.CANCELED);

@@ -32,7 +32,7 @@ public interface EventDAO extends CustomJpaRepository<Event, Long> {
             "and e.category.id in ?2 " +
             "and e.paid = ?3 " +
             "and e.eventDate between ?4 and ?5" +
-            "and e.confirmedRequests < e.participantLimit ")
+            "and (select count(r) from ParticipationRequest as r where r.event.id = ?1 and r.status = 'CONFIRMED') < e.participantLimit ")
     List<Event> getOnlyAvailableEvents(String text, List<Long> categoryIds, Boolean paid, LocalDateTime rangeStart,
                                        LocalDateTime rangeEnd, Pageable pageable);
 

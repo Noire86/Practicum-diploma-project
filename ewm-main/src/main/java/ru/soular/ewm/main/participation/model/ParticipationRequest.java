@@ -20,16 +20,17 @@ public class ParticipationRequest {
     private Long id;
 
     @Column
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @ManyToOne
-    @JoinColumn(name = "requester_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "requester_id", nullable = false)
     private User requester;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RequestStatus status;
 }

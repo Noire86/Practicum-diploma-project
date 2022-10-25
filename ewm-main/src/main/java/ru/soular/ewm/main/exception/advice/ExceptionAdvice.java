@@ -89,4 +89,17 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
         return new ResponseEntity<>(response, ex.getCode());
     }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Object> handleThrowable(Throwable ex) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                .reason("Internal server error")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
+                .build();
+
+        log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

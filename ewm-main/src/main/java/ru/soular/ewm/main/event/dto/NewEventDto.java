@@ -19,7 +19,7 @@ public class NewEventDto {
     @NotBlank
     private String annotation;
 
-    @NotBlank
+    @NotNull
     private Long category;
 
     @NotNull
@@ -32,7 +32,7 @@ public class NewEventDto {
     @NotNull
     private Location location;
 
-    @NotNull
+    @NotBlank
     private String title;
 
     private Boolean paid;

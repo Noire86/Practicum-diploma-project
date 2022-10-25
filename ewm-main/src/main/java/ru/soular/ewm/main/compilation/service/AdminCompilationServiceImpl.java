@@ -73,17 +73,18 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     @Override
     public void unpin(Long compId) {
-        Compilation comp = compilationDAO.findEntityById(compId);
-        comp.setPinned(Boolean.FALSE);
-        log.info("Setting Compilation ID:{} as unpinned", compId);
-        compilationDAO.save(comp);
+        setPinned(compId, Boolean.FALSE);
     }
 
     @Override
     public void pin(Long compId) {
+        setPinned(compId, Boolean.TRUE);
+    }
+
+    private void setPinned(Long compId, Boolean pinned) {
         Compilation comp = compilationDAO.findEntityById(compId);
-        comp.setPinned(Boolean.TRUE);
-        log.info("Setting Compilation ID:{} as pinned", compId);
+        comp.setPinned(pinned);
+        log.info("Setting Compilation ID:{} as {}pinned", compId, pinned ? "" : "un");
         compilationDAO.save(comp);
     }
 }

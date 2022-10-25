@@ -35,10 +35,13 @@ public class NewEventDto {
 
     @NotBlank
     private String title;
+
+    @NotNull
     private Boolean paid;
 
     @PositiveOrZero
     private Integer participantLimit;
 
+    @NotNull
     private Boolean requestModeration;
 }

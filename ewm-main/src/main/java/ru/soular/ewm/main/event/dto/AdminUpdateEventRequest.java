@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.soular.ewm.main.event.model.Location;
 
+import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,6 +20,7 @@ public class AdminUpdateEventRequest {
     private String annotation;
     private Long categoryId;
     private String description;
+    @Future
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private Boolean paid;

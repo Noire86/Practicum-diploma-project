@@ -19,6 +19,12 @@ public class StatsClient extends BaseClient {
 
     private final WrappedExceptionHandler wrappedExceptionHandler;
 
+    @Value("${stats.client.start-time}")
+    private String START_TIME;
+
+    @Value("${stats.client.end-time}")
+    private String END_TIME;
+
     @Autowired
     public StatsClient(@Value("${ewm-stats.server.url}") String serverUrl, RestTemplateBuilder builder,
                        @Autowired WrappedExceptionHandler handler) {
@@ -37,8 +43,8 @@ public class StatsClient extends BaseClient {
     public Long getViews(Long eventId) {
         ResponseEntity<Object> response = getStats(
                 List.of("/events/" + eventId),
-                "1970-01-01 00:00:00",
-                "2999-01-01 00:00:00",
+                START_TIME,
+                END_TIME,
                 false);
 
         List<ViewStatsDto> viewStats = (List<ViewStatsDto>) wrappedExceptionHandler.handleResponse(response).getBody();

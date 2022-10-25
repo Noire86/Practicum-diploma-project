@@ -8,7 +8,7 @@ import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.EventState;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +24,11 @@ public class Event {
     private Long id;
 
     @Column
-    @NotEmpty
+    @NotBlank
     private String title;
 
     @Column
-    @NotEmpty
+    @NotBlank
     private String annotation;
 
     @ManyToOne

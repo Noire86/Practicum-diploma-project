@@ -33,7 +33,7 @@ public class PrivateEventController {
     }
 
     @PatchMapping
-    public ResponseEntity<EventFullDto> update(@PathVariable Long userId, @RequestBody UpdateEventRequest updateEventRequest) {
+    public ResponseEntity<EventFullDto> update(@PathVariable Long userId, @RequestBody @Valid UpdateEventRequest updateEventRequest) {
         return new ResponseEntity<>(service.update(userId, updateEventRequest), HttpStatus.OK);
     }
 

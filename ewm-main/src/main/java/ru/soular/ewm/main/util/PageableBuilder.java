@@ -1,9 +1,12 @@
 package ru.soular.ewm.main.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageableBuilder {
 
     public static Pageable build(Integer from, Integer size) {

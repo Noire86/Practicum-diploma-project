@@ -1,5 +1,6 @@
 package ru.soular.ewm.main.client.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -18,6 +19,7 @@ import java.util.Objects;
 public class StatsClient extends BaseClient {
 
     private final WrappedExceptionHandler wrappedExceptionHandler;
+    private final ObjectMapper objectMapper;
 
     @Value("${stats.client.start-time}")
     private String startTime;
@@ -27,13 +29,15 @@ public class StatsClient extends BaseClient {
 
     @Autowired
     public StatsClient(@Value("${ewm-stats.server.url}") String serverUrl, RestTemplateBuilder builder,
-                       @Autowired WrappedExceptionHandler handler) {
+                       @Autowired WrappedExceptionHandler handler,
+                       @Autowired ObjectMapper mapper) {
         super(builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build()
         );
         this.wrappedExceptionHandler = handler;
+        this.objectMapper = mapper;
     }
 
     public void createEndpointHit(EndpointHitDto endpointHitDto) {
@@ -47,9 +51,12 @@ public class StatsClient extends BaseClient {
                 endTime,
                 false);
 
-        List<ViewStatsDto> viewStats = (List<ViewStatsDto>) wrappedExceptionHandler.handleResponse(response).getBody();
-        if (Objects.nonNull(viewStats) && !viewStats.isEmpty()) {
-            return viewStats.stream()
+        List<Object> responseBody = ((List<Object>) wrappedExceptionHandler.handleResponse(response).getBody());
+
+        if (Objects.nonNull(responseBody)) {
+            return responseBody.stream()
+                    .map(o -> objectMapper.convertValue(o, ViewStatsDto.class))
+                    .filter(Objects::nonNull)
                     .mapToLong(ViewStatsDto::getHits)
                     .sum();
         }

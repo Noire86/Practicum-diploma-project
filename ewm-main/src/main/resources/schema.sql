@@ -78,7 +78,8 @@ CREATE TABLE IF NOT EXISTS comments
     commenter_id BIGINT                                  NOT NULL,
     status       VARCHAR(15)                             NOT NULL,
     CONSTRAINT pk_comment PRIMARY KEY (id),
-    CONSTRAINT FK_COMMENT_ON_COMMENTER FOREIGN KEY (commenter_id) REFERENCES users (id)
+    CONSTRAINT FK_COMMENT_ON_COMMENTER FOREIGN KEY (commenter_id) REFERENCES users (id),
+    CONSTRAINT FK_COMMENT_ON_EVENT FOREIGN KEY (event_id) REFERENCES events (id)
 );
 
 

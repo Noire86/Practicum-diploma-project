@@ -24,4 +24,5 @@ public class UpdateEventRequest {
     private LocalDateTime eventDate;
     private Boolean paid;
     private Long participantLimit;
+    private Boolean commentModeration;
 }

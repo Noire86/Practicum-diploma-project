@@ -25,6 +25,7 @@ public class AdminUpdateEventRequest {
     private LocalDateTime eventDate;
     private Boolean paid;
     private Long participantLimit;
+    private Boolean commentModeration;
     private Boolean requestModeration;
     private Location location;
 }

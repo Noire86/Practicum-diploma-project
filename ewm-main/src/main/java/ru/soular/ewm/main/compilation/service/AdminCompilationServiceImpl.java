@@ -2,7 +2,6 @@ package ru.soular.ewm.main.compilation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.compilation.dao.CompilationDAO;
@@ -12,6 +11,7 @@ import ru.soular.ewm.main.compilation.model.Compilation;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.EventShortDto;
 import ru.soular.ewm.main.event.model.Event;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     private final CompilationDAO compilationDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
     private final EventDAO eventDAO;
     private final StatsClient statsClient;
 

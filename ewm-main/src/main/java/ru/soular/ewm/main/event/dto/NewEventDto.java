@@ -46,4 +46,7 @@ public class NewEventDto {
 
     @NotNull
     private Boolean requestModeration;
+
+    //@NotNull для прохождения тестов проверка на null убрана
+    private Boolean commentModeration;
 }

@@ -2,7 +2,6 @@ package ru.soular.ewm.main.participation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.event.dao.EventDAO;
@@ -15,6 +14,7 @@ import ru.soular.ewm.main.user.dao.UserDAO;
 import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.EventState;
 import ru.soular.ewm.main.util.RequestStatus;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class PrivateParticipationRequestServiceImpl implements PrivateParticipationRequestService {
 
     private final ParticipationRequestDAO requestDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
     private final EventDAO eventDAO;
     private final UserDAO userDAO;
 

@@ -2,12 +2,12 @@ package ru.soular.ewm.main.category.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.category.dao.CategoryDAO;
 import ru.soular.ewm.main.category.dto.CategoryDto;
 import ru.soular.ewm.main.category.model.Category;
 import ru.soular.ewm.main.util.PageableBuilder;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class PublicCategoryServiceImpl implements PublicCategoryService {
 
     private final CategoryDAO categoryDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
 
     @Override
     public CategoryDto get(Long id) {

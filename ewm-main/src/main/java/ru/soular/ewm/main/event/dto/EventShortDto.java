@@ -6,9 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.soular.ewm.main.category.dto.CategoryDto;
+import ru.soular.ewm.main.comment.dto.CommentDto;
 import ru.soular.ewm.main.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,4 +28,5 @@ public class EventShortDto {
     private Boolean paid;
     private String title;
     private Long views;
+    private List<CommentDto> comments;
 }

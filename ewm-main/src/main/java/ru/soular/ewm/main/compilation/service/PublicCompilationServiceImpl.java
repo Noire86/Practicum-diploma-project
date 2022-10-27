@@ -2,7 +2,6 @@ package ru.soular.ewm.main.compilation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.compilation.dao.CompilationDAO;
@@ -10,6 +9,7 @@ import ru.soular.ewm.main.compilation.dto.CompilationDto;
 import ru.soular.ewm.main.compilation.model.Compilation;
 import ru.soular.ewm.main.event.dto.EventShortDto;
 import ru.soular.ewm.main.util.PageableBuilder;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
     private final CompilationDAO compilationDAO;
 
     private final StatsClient statsClient;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
 
     @Override
     public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {

@@ -10,6 +10,7 @@ import ru.soular.ewm.main.exception.model.ExceptionResponse;
 import ru.soular.ewm.main.util.Constants;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Slf4j
 @Order
@@ -23,6 +24,7 @@ public class InternalExceptionAdvice {
                 .reason("Internal server error")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
+                .errors(Collections.emptyList())
                 .build();
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));

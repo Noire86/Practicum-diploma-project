@@ -74,6 +74,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 .reason("The required object was not found.")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
+                .errors(new ArrayList<>())
                 .build();
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
@@ -87,6 +88,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 .reason("For the requested operation the conditions are not met.")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
+                .errors(new ArrayList<>())
                 .build() : ex.getResponse();
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));

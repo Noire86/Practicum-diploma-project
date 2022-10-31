@@ -10,6 +10,9 @@ import ru.soular.ewm.main.comment.service.PrivateCommentService;
 
 import javax.validation.Valid;
 
+/**
+ * Контроллер для эндпоинтов приватного функционала комментариев
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/events/{eventId}/comments")

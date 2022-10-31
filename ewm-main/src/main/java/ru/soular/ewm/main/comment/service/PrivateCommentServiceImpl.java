@@ -20,6 +20,9 @@ import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Имплементация приватного пользовательского сервиса
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,11 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
     private final CommentDAO commentDAO;
     private final CustomModelMapper mapper;
 
+    /**
+     * Создание нового комментария в событии.
+     * Включена проверка на статус события (должно быть опубликовано)
+     * Если в событии отключена модерация - коммент публикуется сразу.
+     */
     @Override
     public CommentDto create(Long userId, Long eventId, NewCommentDto newCommentDto) {
         User user = userDAO.findEntityById(userId);
@@ -50,6 +58,10 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
         return mapper.map(commentDAO.save(comment), CommentDto.class);
     }
 
+    /**
+     * Обновление текста комментария.
+     * При успешном обновлении проставляется таймштамп времени обновления
+     */
     @Override
     public CommentDto update(Long userId, Long commentId, NewCommentDto newCommentDto) {
         Comment comment = commentDAO.findEntityById(commentId);
@@ -67,6 +79,10 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
         return mapper.map(commentDAO.save(comment), CommentDto.class);
     }
 
+    /**
+     * Удаление комментария.
+     * Нельзя удалить чужой комментарий.
+     */
     @Override
     public void delete(Long userId, Long commentId) {
         Comment comment = commentDAO.findEntityById(commentId);

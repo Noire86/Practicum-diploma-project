@@ -5,6 +5,9 @@ import ru.soular.ewm.main.util.CommentState;
 
 import java.util.List;
 
+/**
+ * Интерфейс админского сервиса комментариев
+ */
 public interface AdminCommentService {
 
     void delete(Long eventId, Long commentId);

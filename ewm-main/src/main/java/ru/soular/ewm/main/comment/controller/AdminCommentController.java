@@ -12,6 +12,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Контроллер для эндпоинтов администраторского функционала комментариев
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/events/{eventId}/comments")

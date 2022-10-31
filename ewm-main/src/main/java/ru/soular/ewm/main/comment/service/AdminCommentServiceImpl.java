@@ -13,6 +13,9 @@ import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Имплементация администраторского сервиса
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,9 @@ public class AdminCommentServiceImpl implements AdminCommentService {
     private final CommentDAO commentDAO;
     private final CustomModelMapper mapper;
 
+    /**
+     * Удаление комментария по айди ивента и комментария
+     */
     @Override
     public void delete(Long eventId, Long commentId) {
         if (commentDAO.commentExists(eventId, commentId)) {
@@ -29,6 +35,9 @@ public class AdminCommentServiceImpl implements AdminCommentService {
         }
     }
 
+    /**
+     * Подтверждение и публикация комментария
+     */
     @Override
     public void approve(Long eventId, Long commentId) {
         if (commentDAO.commentExists(eventId, commentId)) {
@@ -38,6 +47,9 @@ public class AdminCommentServiceImpl implements AdminCommentService {
     }
 
 
+    /**
+     * Отклонение комментария
+     */
     @Override
     public void reject(Long eventId, Long commentId) {
         if (commentDAO.commentExists(eventId, commentId)) {
@@ -46,6 +58,9 @@ public class AdminCommentServiceImpl implements AdminCommentService {
         }
     }
 
+    /**
+     * Получение всех комментариев по статусам, поддерживается страничный вывод
+     */
     @Override
     public List<CommentDto> getAll(Long eventId, List<CommentState> states, Integer from, Integer size) {
         if (states == null || states.isEmpty()) {

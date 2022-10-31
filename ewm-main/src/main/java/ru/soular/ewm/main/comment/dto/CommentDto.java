@@ -9,6 +9,9 @@ import ru.soular.ewm.main.util.CommentState;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO для отображения информации о комментариях
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

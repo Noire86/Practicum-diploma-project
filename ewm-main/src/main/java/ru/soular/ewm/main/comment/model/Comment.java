@@ -9,6 +9,9 @@ import ru.soular.ewm.main.util.CommentState;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Модель комментария
+ */
 @Entity
 @Getter
 @Setter

@@ -52,7 +52,9 @@ public class AdminCommentServiceImpl implements AdminCommentService {
             states = Collections.singletonList(CommentState.APPROVED);
         }
 
-        return mapper.mapList(commentDAO.getEventComments(eventId, states, PageableBuilder.build(from, size)), CommentDto.class);
+        return mapper.mapList(
+                commentDAO.getEventComments(eventId, states, PageableBuilder.build(from, size)),
+                CommentDto.class);
     }
 
     private void changeCommentStatus(Long commentId, CommentState state) {

@@ -24,6 +24,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Главный эдвайс для обработки исключений в формате, требуемом ТЗ и спецификацией
+ * Имеет самую высокую очередность в порядке эдвайсов.
+ */
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice

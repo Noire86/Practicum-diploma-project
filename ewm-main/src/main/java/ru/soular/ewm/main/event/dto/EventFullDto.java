@@ -15,6 +15,9 @@ import ru.soular.ewm.main.util.EventState;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * ДТО с полной информацией о событии, включая просмотры и комменты
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

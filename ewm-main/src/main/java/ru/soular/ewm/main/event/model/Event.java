@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+/**
+ * Модель события
+ */
 @Entity
 @Getter
 @Setter

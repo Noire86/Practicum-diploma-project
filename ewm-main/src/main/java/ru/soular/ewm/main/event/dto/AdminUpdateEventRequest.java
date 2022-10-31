@@ -11,6 +11,9 @@ import ru.soular.ewm.main.event.model.Location;
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
+/**
+ * ДТО админского запроса на обновление события
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

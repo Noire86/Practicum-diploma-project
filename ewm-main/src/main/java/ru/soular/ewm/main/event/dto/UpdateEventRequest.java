@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
+/**
+ * ДТО для пользовательского запроса на обновление события
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

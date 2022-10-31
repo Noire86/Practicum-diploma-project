@@ -26,6 +26,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация публичного сервиса событий
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,9 @@ public class PublicEventServiceImpl implements PublicEventService {
     private final CustomModelMapper mapper;
     private final StatsClient statsClient;
 
+    /**
+     * Получение событий по категориям, платности, доступности и временному периоду
+     */
     @Override
     public List<EventShortDto> getEvents(String text, List<Long> categoryIds, Boolean paid, String rangeStart,
                                          String rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from,
@@ -82,6 +88,9 @@ public class PublicEventServiceImpl implements PublicEventService {
         return result;
     }
 
+    /**
+     * Получение полной информации о событии
+     */
     @Override
     public EventFullDto get(Long id, HttpServletRequest request) {
         Event event = eventDAO.findEntityById(id);

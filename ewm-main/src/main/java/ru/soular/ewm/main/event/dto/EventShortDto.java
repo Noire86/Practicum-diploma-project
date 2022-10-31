@@ -12,6 +12,9 @@ import ru.soular.ewm.main.user.dto.UserShortDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Укороченный вариант ДТО события
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

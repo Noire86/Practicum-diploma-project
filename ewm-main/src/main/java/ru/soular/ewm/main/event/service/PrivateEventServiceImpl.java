@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация приватного пользовательского сервиса событий
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
     private final StatsClient statsClient;
 
+    /**
+     * Поиск событий по автору
+     */
     @Override
     public List<EventShortDto> getEvents(Long userId, Integer from, Integer size) {
         User user = userDAO.findEntityById(userId);
@@ -63,6 +69,12 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return events;
     }
 
+    /**
+     * Обновление события пользователем.
+     * Нельзя обновить чужое событие.
+     * Нельзя обновить опубликованное событие
+     * Событие должно начинаться не ранее 2 часов от нынешнего времени
+     */
     @Override
     public EventFullDto update(Long userId, UpdateEventRequest req) {
         User user = userDAO.findEntityById(userId);
@@ -99,6 +111,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return result;
     }
 
+    /**
+     * Создание нового события
+     */
     @Override
     public EventFullDto create(Long userId, NewEventDto newEventDto) {
         User initiator = userDAO.findEntityById(userId);
@@ -115,6 +130,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return mapper.map(eventDAO.save(event), EventFullDto.class);
     }
 
+    /**
+     * Получение информации о своем событии
+     */
     @Override
     public EventFullDto getEvent(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -132,6 +150,11 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return result;
     }
 
+    /**
+     * Отмена события пользователем
+     * Нельзя отменить чужое событие.
+     * Нельзя отменить неподтвержденное событие
+     */
     @Override
     public EventFullDto cancelEvent(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -155,6 +178,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return result;
     }
 
+    /**
+     * Получение запросов на участие в своем событии
+     */
     @Override
     public List<ParticipationRequestDto> getRequestsByInitiator(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -174,6 +200,11 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Подтверждение запроса на участие в событии
+     * Нельзя подтвердить запрос на чужое событие.
+     * Нельзя подтвердить запрос, если лимит участников превышен
+     */
     @Override
     public ParticipationRequestDto confirmRequest(Long userId, Long eventId, Long requestId) {
         User user = userDAO.findEntityById(userId);
@@ -207,6 +238,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return result;
     }
 
+    /**
+     * Отмена запроса на участие
+     */
     @Override
     public ParticipationRequestDto rejectRequest(Long userId, Long eventId, Long requestId) {
         User user = userDAO.findEntityById(userId);

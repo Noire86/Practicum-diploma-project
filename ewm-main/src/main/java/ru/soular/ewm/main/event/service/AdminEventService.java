@@ -6,6 +6,9 @@ import ru.soular.ewm.main.util.EventState;
 
 import java.util.List;
 
+/**
+ * Интерфейс админского сервиса событий
+ */
 public interface AdminEventService {
     List<EventFullDto> getEvents(List<Long> userIds, List<EventState> states, List<Long> categoryIds, String rangeStart,
                                  String rangeEnd, Integer from, Integer size);

@@ -11,6 +11,9 @@ import ru.soular.ewm.stats.util.Constants;
 
 import java.time.LocalDateTime;
 
+/**
+ * Эдвайс для низкоприоритетных внутренних исключений приложения
+ */
 @Slf4j
 @Order
 @RestControllerAdvice

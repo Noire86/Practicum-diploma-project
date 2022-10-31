@@ -14,6 +14,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Контроллер публтичных эндпоинтов событий
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/events")

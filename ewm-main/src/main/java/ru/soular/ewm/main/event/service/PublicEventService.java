@@ -7,6 +7,9 @@ import ru.soular.ewm.main.util.EventSort;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * Интерфейс публичного пользовательского сервиса событий
+ */
 public interface PublicEventService {
 
     List<EventShortDto> getEvents(String text, List<Long> categoryIds, Boolean paid, String rangeStart, String rangeEnd,

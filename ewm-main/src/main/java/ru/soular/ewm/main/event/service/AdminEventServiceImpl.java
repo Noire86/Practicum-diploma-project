@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация админского сервиса событий
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,9 @@ public class AdminEventServiceImpl implements AdminEventService {
 
     private final StatsClient statsClient;
 
+    /**
+     * Получение всех событий по списку айди, состояниям, категориям и временному периоду.
+     */
     @Override
     public List<EventFullDto> getEvents(List<Long> userIds, List<EventState> states, List<Long> categoryIds,
                                         String rangeStart, String rangeEnd, Integer from, Integer size) {
@@ -54,6 +60,9 @@ public class AdminEventServiceImpl implements AdminEventService {
         return result;
     }
 
+    /**
+     * Обновление события в качестве администратора
+     */
     @Override
     public EventFullDto update(Long id, AdminUpdateEventRequest dto) {
         Event event = eventDAO.findEntityById(id);
@@ -79,6 +88,11 @@ public class AdminEventServiceImpl implements AdminEventService {
         return result;
     }
 
+    /**
+     * Подтверждение и публикация события.
+     * Нельзя опубликовать событие с датой ранее чем час от нынешнего времени.
+     * Можно опубликовать только ожидающие публикации события.
+     */
     @Override
     public EventFullDto publish(Long id) {
         Event event = eventDAO.findEntityById(id);
@@ -103,6 +117,9 @@ public class AdminEventServiceImpl implements AdminEventService {
         return result;
     }
 
+    /**
+     * Отмена неопубликованного события
+     */
     @Override
     public EventFullDto reject(Long id) {
         Event event = eventDAO.findEntityById(id);

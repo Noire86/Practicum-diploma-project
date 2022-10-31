@@ -12,11 +12,17 @@ import java.util.List;
 
 public interface EventDAO extends CustomJpaRepository<Event, Long> {
 
+    /**
+     * Поиск событий для админов (по спискам айди, категорий и статусам)
+     */
     @Query("select e from Event as e where e.initiator.id in ?1 and e.state in ?2 and e.category.id in ?3 " +
             "and e.eventDate between ?4 and ?5")
     List<Event> getEvents(List<Long> userIds, List<EventState> states, List<Long> categoryIds, LocalDateTime rangeStart,
                           LocalDateTime rangeEnd, Pageable pageable);
 
+    /**
+     * Поиск событий для пользователей (поиск по строкам, по платности)
+     */
     @Query("select e from Event as e " +
             "where upper(e.annotation) like upper(concat('%', ?1, '%')) " +
             "or upper(e.description) like upper(concat('%', ?1, '%')) " +
@@ -26,6 +32,9 @@ public interface EventDAO extends CustomJpaRepository<Event, Long> {
     List<Event> getEvents(String text, List<Long> categoryIds, Boolean paid, LocalDateTime rangeStart,
                           LocalDateTime rangeEnd, Pageable pageable);
 
+    /**
+     * Получение только доступных для участия событий
+     */
     @Query("select e from Event as e " +
             "where upper(e.annotation) like upper(concat('%', ?1, '%')) " +
             "or upper(e.description) like upper(concat('%', ?1, '%')) " +
@@ -36,7 +45,13 @@ public interface EventDAO extends CustomJpaRepository<Event, Long> {
     List<Event> getOnlyAvailableEvents(String text, List<Long> categoryIds, Boolean paid, LocalDateTime rangeStart,
                                        LocalDateTime rangeEnd, Pageable pageable);
 
+    /**
+     * Получение событий по создателю
+     */
     List<Event> getEventsByInitiator(User initiator, Pageable pageable);
 
+    /**
+     * Получение событий по категории
+     */
     List<Event> getEventsByCategory_Id(Long categoryId);
 }

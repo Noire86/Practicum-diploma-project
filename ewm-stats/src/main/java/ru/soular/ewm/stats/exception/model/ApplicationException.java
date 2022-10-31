@@ -3,6 +3,9 @@ package ru.soular.ewm.stats.exception.model;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Основное исключение для бизнес-логики приложения
+ */
 public class ApplicationException extends RuntimeException {
 
     @Getter

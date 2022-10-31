@@ -12,6 +12,9 @@ import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация публичного сервиса категорий
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

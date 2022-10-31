@@ -15,6 +15,9 @@ import ru.soular.ewm.main.exception.WrappedExceptionHandler;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Клиент для общения с сервисом статистики
+ */
 @Service
 public class StatsClient extends BaseClient {
 
@@ -40,10 +43,16 @@ public class StatsClient extends BaseClient {
         this.objectMapper = mapper;
     }
 
+    /**
+     * Отправка статистики использования эндпоинтов
+     */
     public void createEndpointHit(EndpointHitDto endpointHitDto) {
         post("/hit", endpointHitDto);
     }
 
+    /**
+     * Получение количества просмотров по айди события
+     */
     public Long getViews(Long eventId) {
         ResponseEntity<Object> response = getStats(
                 List.of("/events/" + eventId),
@@ -64,6 +73,9 @@ public class StatsClient extends BaseClient {
         return 0L;
     }
 
+    /**
+     * Метод получения статистики использования приложения
+     */
     public ResponseEntity<Object> getStats(List<String> uris, String start, String end, Boolean unique) {
         return get(String.format("/stats/?uris=%s&start=%s&end=%s&unique=%b",
                 String.join(",", uris),

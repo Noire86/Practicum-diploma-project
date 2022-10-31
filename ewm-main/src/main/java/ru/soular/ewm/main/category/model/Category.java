@@ -6,6 +6,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+/**
+ * Модель категории
+ */
 @Entity
 @Getter
 @Setter

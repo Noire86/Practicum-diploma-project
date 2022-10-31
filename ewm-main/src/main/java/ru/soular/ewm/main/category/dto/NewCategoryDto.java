@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * ДТО создания категории
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

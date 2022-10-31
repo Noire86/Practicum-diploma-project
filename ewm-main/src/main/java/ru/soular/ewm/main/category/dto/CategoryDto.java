@@ -8,6 +8,9 @@ import ru.soular.ewm.main.category.validation.CategoryUpdate;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * ДТО информации о категории
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

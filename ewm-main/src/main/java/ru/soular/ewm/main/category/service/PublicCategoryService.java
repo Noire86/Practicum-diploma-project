@@ -4,6 +4,9 @@ import ru.soular.ewm.main.category.dto.CategoryDto;
 
 import java.util.List;
 
+/**
+ * Интерфейс публичного сервиса категорий
+ */
 public interface PublicCategoryService {
 
     CategoryDto get(Long id);

@@ -15,6 +15,9 @@ import ru.soular.ewm.main.user.dto.UserShortDto;
 import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
+/**
+ * Класс для обьявления и конфигурации бинов
+ */
 @Configuration
 public class AppConfiguration {
 

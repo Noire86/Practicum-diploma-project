@@ -24,6 +24,9 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
     private final StatsClient statsClient;
     private final CustomModelMapper mapper;
 
+    /**
+     * Получение всех подборок по признаку прикрепления
+     */
     @Override
     public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
         List<Compilation> comps = compilationDAO.getCompilationsByPinned(pinned, PageableBuilder.build(from, size));
@@ -33,6 +36,9 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Получение подборки по айди
+     */
     @Override
     public CompilationDto get(Long compId) {
         Compilation comp = compilationDAO.findEntityById(compId);

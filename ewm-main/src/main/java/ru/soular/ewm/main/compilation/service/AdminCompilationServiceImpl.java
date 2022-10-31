@@ -16,6 +16,9 @@ import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация сервиса подборок для админского функционала
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,9 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     private final EventDAO eventDAO;
     private final StatsClient statsClient;
 
+    /**
+     * Создание новой компиляции
+     */
     @Override
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         Compilation compilation = mapper.map(newCompilationDto, Compilation.class);
@@ -45,12 +51,18 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     }
 
+    /**
+     * Удаление компиляции
+     */
     @Override
     public void delete(Long compId) {
         log.info("Deleting compilation ID:{}", compId);
         if (compilationDAO.existsById(compId)) compilationDAO.deleteById(compId);
     }
 
+    /**
+     * Удаление компиляции
+     */
     @Override
     public void deleteEvent(Long compId, Long eventId) {
         Compilation comp = compilationDAO.findEntityById(compId);
@@ -61,6 +73,9 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         compilationDAO.save(comp);
     }
 
+    /**
+     * Добавление события в подборку
+     */
     @Override
     public void addEvent(Long compId, Long eventId) {
         Compilation comp = compilationDAO.findEntityById(compId);
@@ -71,11 +86,17 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         compilationDAO.save(comp);
     }
 
+    /**
+     * Открепление подборки
+     */
     @Override
     public void unpin(Long compId) {
         setPinned(compId, Boolean.FALSE);
     }
 
+    /**
+     * Закрепление подборки
+     */
     @Override
     public void pin(Long compId) {
         setPinned(compId, Boolean.TRUE);

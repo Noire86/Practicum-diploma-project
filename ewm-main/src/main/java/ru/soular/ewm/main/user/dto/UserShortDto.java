@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Укороченный ДТО пользователей
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

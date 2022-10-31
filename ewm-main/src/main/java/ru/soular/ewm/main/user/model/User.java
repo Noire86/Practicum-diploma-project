@@ -8,6 +8,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Модель пользователя
+ */
 @Entity
 @Getter
 @Setter

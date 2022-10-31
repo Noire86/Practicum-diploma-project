@@ -9,6 +9,12 @@ import org.springframework.stereotype.Component;
 import ru.soular.ewm.main.exception.model.ApplicationException;
 import ru.soular.ewm.main.exception.model.ExceptionResponse;
 
+/**
+ * Хендлер для обработки переадресованных исключений
+ * других сервисов.
+ * Обрабатывает, маппит и конвертирует присланный ответ во внутреннее
+ * исключение приложения ApplicationException
+ */
 @Component
 @RequiredArgsConstructor
 public class WrappedExceptionHandler {

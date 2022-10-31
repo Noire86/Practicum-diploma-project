@@ -4,6 +4,9 @@ import ru.soular.ewm.main.participation.dto.ParticipationRequestDto;
 
 import java.util.List;
 
+/**
+ * Интерфейс приватного сервиса запросов на участие
+ */
 public interface PrivateParticipationRequestService {
     List<ParticipationRequestDto> get(Long userId);
 

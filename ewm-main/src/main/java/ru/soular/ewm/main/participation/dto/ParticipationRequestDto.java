@@ -10,6 +10,9 @@ import ru.soular.ewm.main.util.RequestStatus;
 
 import java.time.LocalDateTime;
 
+/**
+ * ДТО запросов на участие
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

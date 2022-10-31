@@ -10,6 +10,9 @@ import ru.soular.ewm.main.participation.service.PrivateParticipationRequestServi
 
 import java.util.List;
 
+/**
+ * Контроллер приватных эндпоинтов запросов на участие
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}/requests")

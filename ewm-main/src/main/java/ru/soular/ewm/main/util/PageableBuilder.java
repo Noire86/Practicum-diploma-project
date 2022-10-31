@@ -6,6 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * Утилитарный класс единой обработки страничного вывода данных
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageableBuilder {
 

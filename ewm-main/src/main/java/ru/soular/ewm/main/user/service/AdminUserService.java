@@ -4,6 +4,9 @@ import ru.soular.ewm.main.user.dto.UserDto;
 
 import java.util.List;
 
+/**
+ * Интерфейс сервиса пользователей
+ */
 public interface AdminUserService {
     UserDto create(UserDto userDto);
 

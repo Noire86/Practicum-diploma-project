@@ -5,6 +5,10 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 import javax.persistence.EntityNotFoundException;
 
+/**
+ * Наследник JPA репозитория, нужен для создания метода и
+ * поиска энтитей с выбросом исключения, соответствующего спецификации ТЗ
+ */
 @NoRepositoryBean
 public interface CustomJpaRepository<T, ID> extends JpaRepository<T, ID> {
 

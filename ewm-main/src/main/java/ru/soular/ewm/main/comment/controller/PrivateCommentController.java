@@ -29,15 +29,14 @@ public class PrivateCommentController {
     @PatchMapping("/{commentId}")
     public ResponseEntity<CommentDto> update(
             @PathVariable Long userId,
-            @PathVariable Long eventId,
             @PathVariable Long commentId,
             @Valid @RequestBody NewCommentDto newCommentDto) {
 
-        return new ResponseEntity<>(service.update(userId, eventId, commentId, newCommentDto), HttpStatus.OK);
+        return new ResponseEntity<>(service.update(userId, commentId, newCommentDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{commentId}")
-    public void delete(@PathVariable Long userId, @PathVariable Long eventId, @PathVariable Long commentId) {
-        service.delete(userId, eventId, commentId);
+    public void delete(@PathVariable Long userId, @PathVariable Long commentId) {
+        service.delete(userId, commentId);
     }
 }

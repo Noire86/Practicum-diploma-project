@@ -7,7 +7,7 @@ public interface PrivateCommentService {
 
     CommentDto create(Long userId, Long eventId, NewCommentDto newCommentDto);
 
-    CommentDto update(Long userId, Long eventId, Long commentId, NewCommentDto newCommentDto);
+    CommentDto update(Long userId, Long commentId, NewCommentDto newCommentDto);
 
-    void delete(Long userId, Long eventId, Long commentId);
+    void delete(Long userId, Long commentId);
 }

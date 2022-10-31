@@ -51,7 +51,7 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
     }
 
     @Override
-    public CommentDto update(Long userId, Long eventId, Long commentId, NewCommentDto newCommentDto) {
+    public CommentDto update(Long userId, Long commentId, NewCommentDto newCommentDto) {
         Comment comment = commentDAO.findEntityById(commentId);
 
         if (!Objects.equals(comment.getCommenter().getId(), userId)) {
@@ -68,7 +68,7 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
     }
 
     @Override
-    public void delete(Long userId, Long eventId, Long commentId) {
+    public void delete(Long userId, Long commentId) {
         Comment comment = commentDAO.findEntityById(commentId);
 
         if (!Objects.equals(comment.getCommenter().getId(), userId)) {

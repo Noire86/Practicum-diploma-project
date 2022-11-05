@@ -24,11 +24,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Главный эдвайс для обработки исключений в формате, требуемом ТЗ и спецификацией
+ * Имеет самую высокую очередность в порядке эдвайсов.
+ */
 @Slf4j
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
+    /**
+     * Переопределенный хендлер для исключений валидации, и прочих
+     * исключений.
+     * Добавляет ошибки валидации в список errors
+     */
     @Override
     @NonNull
     public ResponseEntity<Object> handleExceptionInternal(
@@ -53,6 +62,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Хендлер для обработки ConstraintViolationException по
+     * формату в спецификации
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
@@ -67,6 +80,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
+    /**
+     * Хендлер для обработки не найденных сущностей в JPA.
+     * Соответствует спецификации и формату ошибок в ответе.
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
@@ -74,12 +91,17 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 .reason("The required object was not found.")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
+                .errors(new ArrayList<>())
                 .build();
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Единый хендлер для обработки исключений бизнес-логики приложения.
+     * Исключение содержит в себе текст ошибки и информацию о статус-коде ответа.
+     */
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<Object> handleApplicationException(ApplicationException ex) {
         ExceptionResponse response = ex.getResponse() == null ? ExceptionResponse.builder()
@@ -87,6 +109,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 .reason("For the requested operation the conditions are not met.")
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now().format(Constants.FORMATTER))
+                .errors(new ArrayList<>())
                 .build() : ex.getResponse();
 
         log.warn(String.format("%s is thrown: %s", ex.getClass().getSimpleName(), ex.getMessage()));

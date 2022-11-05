@@ -11,6 +11,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+/**
+ * Контроллер публичного функционала подборок
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/compilations")

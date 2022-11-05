@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Модель подборки
+ */
 @Entity
 @Getter
 @Setter

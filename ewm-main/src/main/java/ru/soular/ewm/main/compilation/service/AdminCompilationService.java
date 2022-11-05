@@ -3,6 +3,9 @@ package ru.soular.ewm.main.compilation.service;
 import ru.soular.ewm.main.compilation.dto.CompilationDto;
 import ru.soular.ewm.main.compilation.dto.NewCompilationDto;
 
+/**
+ * Интерфейс админского сервиса подборок
+ */
 public interface AdminCompilationService {
 
     CompilationDto create(NewCompilationDto newCompilationDto);

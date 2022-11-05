@@ -2,12 +2,13 @@ package ru.soular.ewm.main.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.category.dao.CategoryDAO;
 import ru.soular.ewm.main.category.model.Category;
 import ru.soular.ewm.main.client.service.StatsClient;
+import ru.soular.ewm.main.comment.dao.CommentDAO;
+import ru.soular.ewm.main.comment.dto.CommentDto;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.EventFullDto;
 import ru.soular.ewm.main.event.dto.EventShortDto;
@@ -23,12 +24,16 @@ import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.EventState;
 import ru.soular.ewm.main.util.PageableBuilder;
 import ru.soular.ewm.main.util.RequestStatus;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация приватного пользовательского сервиса событий
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,12 +41,16 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
     private final ParticipationRequestDAO requestDAO;
     private final CategoryDAO categoryDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
+    private final CommentDAO commentDAO;
     private final EventDAO eventDAO;
     private final UserDAO userDAO;
 
     private final StatsClient statsClient;
 
+    /**
+     * Поиск событий по автору
+     */
     @Override
     public List<EventShortDto> getEvents(Long userId, Integer from, Integer size) {
         User user = userDAO.findEntityById(userId);
@@ -50,12 +59,22 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .map(event -> mapper.map(event, EventShortDto.class))
                 .collect(Collectors.toList());
 
-        events.forEach(event -> event.setViews(statsClient.getViews(event.getId())));
-        events.forEach(event -> event.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId())));
+        events.forEach(event -> {
+            event.setViews(statsClient.getViews(event.getId()));
+            event.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
+            event.setComments(mapper.mapList(commentDAO.getApprovedComments(event.getId()), CommentDto.class));
+        });
+
         log.info("Getting all events by user ID:{}", userId);
         return events;
     }
 
+    /**
+     * Обновление события пользователем.
+     * Нельзя обновить чужое событие.
+     * Нельзя обновить опубликованное событие
+     * Событие должно начинаться не ранее 2 часов от нынешнего времени
+     */
     @Override
     public EventFullDto update(Long userId, UpdateEventRequest req) {
         User user = userDAO.findEntityById(userId);
@@ -83,14 +102,18 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         if (req.getEventDate() != null) event.setEventDate(req.getEventDate());
         if (req.getPaid() != null) event.setPaid(req.getPaid());
         if (req.getParticipantLimit() != null) event.setParticipantLimit(req.getParticipantLimit());
+        if (req.getCommentModeration() != null) event.setCommentModeration(req.getCommentModeration());
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
-        result.setViews(statsClient.getViews(event.getId()));
-        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
+        setEventData(result);
+
         log.info("Updating event ID:{} with data={}", req.getEventId(), req);
         return result;
     }
 
+    /**
+     * Создание нового события
+     */
     @Override
     public EventFullDto create(Long userId, NewEventDto newEventDto) {
         User initiator = userDAO.findEntityById(userId);
@@ -101,11 +124,15 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         event.setCategory(category);
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
+        event.setCommentModeration(false);
 
         log.info("Creating new Event with data={}", event);
         return mapper.map(eventDAO.save(event), EventFullDto.class);
     }
 
+    /**
+     * Получение информации о своем событии
+     */
     @Override
     public EventFullDto getEvent(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -117,12 +144,17 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         }
 
         EventFullDto result = mapper.map(eventDAO.findEntityById(eventId), EventFullDto.class);
-        result.setViews(statsClient.getViews(event.getId()));
-        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
+        setEventData(result);
+
         log.info("Getting event ID:{} by user ID:{}", eventId, userId);
         return result;
     }
 
+    /**
+     * Отмена события пользователем
+     * Нельзя отменить чужое событие.
+     * Нельзя отменить неподтвержденное событие
+     */
     @Override
     public EventFullDto cancelEvent(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -140,12 +172,15 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         event.setState(EventState.CANCELED);
 
         EventFullDto result = mapper.map(eventDAO.save(event), EventFullDto.class);
-        result.setViews(statsClient.getViews(event.getId()));
-        result.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
+        setEventData(result);
+
         log.info("Cancelling event ID:{} by user ID:{}", eventId, userId);
         return result;
     }
 
+    /**
+     * Получение запросов на участие в своем событии
+     */
     @Override
     public List<ParticipationRequestDto> getRequestsByInitiator(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -165,6 +200,11 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Подтверждение запроса на участие в событии
+     * Нельзя подтвердить запрос на чужое событие.
+     * Нельзя подтвердить запрос, если лимит участников превышен
+     */
     @Override
     public ParticipationRequestDto confirmRequest(Long userId, Long eventId, Long requestId) {
         User user = userDAO.findEntityById(userId);
@@ -198,6 +238,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return result;
     }
 
+    /**
+     * Отмена запроса на участие
+     */
     @Override
     public ParticipationRequestDto rejectRequest(Long userId, Long eventId, Long requestId) {
         User user = userDAO.findEntityById(userId);
@@ -214,5 +257,11 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         log.info("Rejecting participation request ID:{} for event ID:{} by user ID:{}", requestId, eventId, userId);
         return result;
+    }
+
+    private void setEventData(EventFullDto dto) {
+        dto.setViews(statsClient.getViews(dto.getId()));
+        dto.setConfirmedRequests(requestDAO.countConfirmedRequests(dto.getId()));
+        dto.setComments(mapper.mapList(commentDAO.getApprovedComments(dto.getId()), CommentDto.class));
     }
 }

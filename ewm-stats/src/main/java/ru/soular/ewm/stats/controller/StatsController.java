@@ -10,6 +10,9 @@ import ru.soular.ewm.stats.service.StatsService;
 
 import java.util.List;
 
+/**
+ * Контроллер эндпоинтов сборки статистики
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping

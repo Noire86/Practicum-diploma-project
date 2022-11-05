@@ -8,6 +8,9 @@ import ru.soular.ewm.main.event.dto.EventShortDto;
 
 import java.util.List;
 
+/**
+ * ДТО Подборок
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

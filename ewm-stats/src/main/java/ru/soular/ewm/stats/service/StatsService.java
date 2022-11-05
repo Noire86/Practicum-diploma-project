@@ -5,6 +5,9 @@ import ru.soular.ewm.stats.dto.ViewStatsDto;
 
 import java.util.List;
 
+/**
+ * Интерфейс сервиса статистики
+ */
 public interface StatsService {
     EndpointHitDto create(EndpointHitDto endpointHitDto);
 

@@ -2,23 +2,26 @@ package ru.soular.ewm.main.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.user.dao.UserDAO;
 import ru.soular.ewm.main.user.dto.UserDto;
 import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.PageableBuilder;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация сервиса пользователей
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminUserServiceImpl implements AdminUserService {
 
     private final UserDAO userDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
 
     @Override
     public UserDto create(UserDto userDto) {

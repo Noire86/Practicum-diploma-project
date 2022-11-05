@@ -9,6 +9,9 @@ import ru.soular.ewm.main.util.RequestStatus;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Модель запросов на участие
+ */
 @Entity
 @Getter
 @Setter

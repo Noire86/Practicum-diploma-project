@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+/**
+ * Модель события
+ */
 @Entity
 @Getter
 @Setter
@@ -60,6 +63,9 @@ public class Event {
 
     @Column(name = "request_moderation")
     private Boolean requestModeration;
+
+    @Column(name = "comment_moderation")
+    private Boolean commentModeration;
 
     @Column
     @Enumerated(EnumType.STRING)

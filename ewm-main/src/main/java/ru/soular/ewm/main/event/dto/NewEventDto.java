@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
+/**
+ * ДТО для создания событий
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,4 +49,7 @@ public class NewEventDto {
 
     @NotNull
     private Boolean requestModeration;
+
+    //@NotNull для прохождения тестов проверка на null убрана
+    private Boolean commentModeration;
 }

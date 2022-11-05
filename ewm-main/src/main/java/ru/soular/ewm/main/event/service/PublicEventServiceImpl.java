@@ -2,11 +2,12 @@ package ru.soular.ewm.main.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.client.dto.EndpointHitDto;
 import ru.soular.ewm.main.client.service.StatsClient;
+import ru.soular.ewm.main.comment.dao.CommentDAO;
+import ru.soular.ewm.main.comment.dto.CommentDto;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.EventFullDto;
 import ru.soular.ewm.main.event.dto.EventShortDto;
@@ -17,6 +18,7 @@ import ru.soular.ewm.main.util.Constants;
 import ru.soular.ewm.main.util.EventSort;
 import ru.soular.ewm.main.util.EventState;
 import ru.soular.ewm.main.util.PageableBuilder;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -24,6 +26,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация публичного сервиса событий
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,9 +36,13 @@ public class PublicEventServiceImpl implements PublicEventService {
 
     private final EventDAO eventDAO;
     private final ParticipationRequestDAO requestDAO;
-    private final ModelMapper mapper;
+    private final CommentDAO commentDAO;
+    private final CustomModelMapper mapper;
     private final StatsClient statsClient;
 
+    /**
+     * Получение событий по категориям, платности, доступности и временному периоду
+     */
     @Override
     public List<EventShortDto> getEvents(String text, List<Long> categoryIds, Boolean paid, String rangeStart,
                                          String rangeEnd, Boolean onlyAvailable, EventSort sort, Integer from,
@@ -61,8 +70,13 @@ public class PublicEventServiceImpl implements PublicEventService {
                 result.sort(Comparator.comparing(EventShortDto::getViews));
                 break;
         }
-        result.forEach(dto -> dto.setViews(statsClient.getViews(dto.getId())));
-        result.forEach(dto -> dto.setConfirmedRequests(requestDAO.countConfirmedRequests(dto.getId())));
+
+        result.forEach(event -> {
+            event.setViews(statsClient.getViews(event.getId()));
+            event.setConfirmedRequests(requestDAO.countConfirmedRequests(event.getId()));
+            event.setComments(mapper.mapList(commentDAO.getApprovedComments(event.getId()), CommentDto.class));
+        });
+
         statsClient.createEndpointHit(EndpointHitDto.builder()
                 .app("Explore With Me")
                 .uri(request.getRequestURI())
@@ -74,6 +88,9 @@ public class PublicEventServiceImpl implements PublicEventService {
         return result;
     }
 
+    /**
+     * Получение полной информации о событии
+     */
     @Override
     public EventFullDto get(Long id, HttpServletRequest request) {
         Event event = eventDAO.findEntityById(id);
@@ -83,8 +100,10 @@ public class PublicEventServiceImpl implements PublicEventService {
         }
 
         EventFullDto result = mapper.map(event, EventFullDto.class);
-        result.setViews(statsClient.getViews(event.getId()));
+        result.setViews(statsClient.getViews(result.getId()));
         result.setConfirmedRequests(requestDAO.countConfirmedRequests(result.getId()));
+        result.setComments(mapper.mapList(commentDAO.getApprovedComments(event.getId()), CommentDto.class));
+
         statsClient.createEndpointHit(EndpointHitDto.builder()
                 .app("Explore With Me")
                 .uri(request.getRequestURI())

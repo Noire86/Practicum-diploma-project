@@ -20,6 +20,9 @@ import java.util.List;
 
 import static ru.soular.ewm.stats.util.Constants.FORMATTER;
 
+/**
+ * Имплементация сервиса статистики
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,9 @@ public class StatsServiceImpl implements StatsService {
     private final ModelMapper mapper;
     private final EndpointHitDAO hitDAO;
 
+    /**
+     * Создание записи статистики
+     */
     @Override
     public EndpointHitDto create(EndpointHitDto endpointHitDto) {
         EndpointHit hit = mapper.map(endpointHitDto, EndpointHit.class);
@@ -36,6 +42,9 @@ public class StatsServiceImpl implements StatsService {
         return mapper.map(hitDAO.save(hit), EndpointHitDto.class);
     }
 
+    /**
+     * Получение выборки статистики использования сервисов
+     */
     @Override
     public List<ViewStatsDto> get(String start, String end, List<String> uris, Boolean unique) {
         List<ViewStatsDto> result = new ArrayList<>();

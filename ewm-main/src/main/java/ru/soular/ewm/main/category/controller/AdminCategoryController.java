@@ -10,6 +10,9 @@ import ru.soular.ewm.main.category.dto.NewCategoryDto;
 import ru.soular.ewm.main.category.service.AdminCategoryService;
 import ru.soular.ewm.main.category.validation.CategoryUpdate;
 
+/**
+ * Админский контроллер категорий
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/categories")

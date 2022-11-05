@@ -10,6 +10,9 @@ import ru.soular.ewm.main.category.service.PublicCategoryService;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+/**
+ * Публичный контроллер категорий
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/categories")

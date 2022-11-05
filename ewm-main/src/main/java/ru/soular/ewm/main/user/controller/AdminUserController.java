@@ -12,6 +12,9 @@ import ru.soular.ewm.main.user.service.AdminUserService;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+/**
+ * Контроллер управления пользователями
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/users")

@@ -2,7 +2,6 @@ package ru.soular.ewm.main.participation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.event.dao.EventDAO;
@@ -15,21 +14,28 @@ import ru.soular.ewm.main.user.dao.UserDAO;
 import ru.soular.ewm.main.user.model.User;
 import ru.soular.ewm.main.util.EventState;
 import ru.soular.ewm.main.util.RequestStatus;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация сервиса запросов на участие
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PrivateParticipationRequestServiceImpl implements PrivateParticipationRequestService {
 
     private final ParticipationRequestDAO requestDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
     private final EventDAO eventDAO;
     private final UserDAO userDAO;
 
+    /**
+     * Получение всех запросов по пользователю
+     */
     @Override
     public List<ParticipationRequestDto> get(Long userId) {
         User user = userDAO.findEntityById(userId);
@@ -41,6 +47,13 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Создание запроса на участие.
+     * Нельзя создать повторный запрос.
+     * Нельзя создать запрос к своему же событию.
+     * Нельзя создать запрос к неопубликованному событию.
+     * Нельзя создать запрос к событию, которое достигло лимита участников.
+     */
     @Override
     public ParticipationRequestDto create(Long userId, Long eventId) {
         User user = userDAO.findEntityById(userId);
@@ -74,6 +87,9 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
 
     }
 
+    /**
+     * Отмена запроса на участие
+     */
     @Override
     public ParticipationRequestDto cancel(Long userId, Long requestId) {
         User user = userDAO.findEntityById(userId);

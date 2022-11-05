@@ -8,6 +8,9 @@ import ru.soular.ewm.main.participation.dto.ParticipationRequestDto;
 
 import java.util.List;
 
+/**
+ * Интерфейс приватного пользовательского сервиса событий
+ */
 public interface PrivateEventService {
     List<EventShortDto> getEvents(Long userId, Integer from, Integer size);
 

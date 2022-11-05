@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface CompilationDAO extends CustomJpaRepository<Compilation, Long> {
 
+    /**
+     * Получение подборок по признаку "закреплена"
+     */
     List<Compilation> getCompilationsByPinned(Boolean pinned, Pageable pageable);
 }

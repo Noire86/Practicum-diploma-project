@@ -10,6 +10,9 @@ import ru.soular.ewm.main.compilation.service.AdminCompilationService;
 
 import javax.validation.Valid;
 
+/**
+ * Контроллер админского функционала подборок
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/compilations")

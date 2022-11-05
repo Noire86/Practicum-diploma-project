@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+/**
+ * ДТО создания подборки
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

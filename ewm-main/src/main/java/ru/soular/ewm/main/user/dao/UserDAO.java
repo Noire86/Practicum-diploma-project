@@ -9,5 +9,8 @@ import java.util.List;
 
 public interface UserDAO extends CustomJpaRepository<User, Long> {
 
+    /**
+     * Поиск всех юзеров из переданного списка с айди
+     */
     List<User> findAllByIdIn(Collection<Long> id, Pageable pageable);
 }

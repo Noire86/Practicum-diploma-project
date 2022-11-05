@@ -11,6 +11,9 @@ import ru.soular.ewm.main.event.model.Location;
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
+/**
+ * ДТО админского запроса на обновление события
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +28,7 @@ public class AdminUpdateEventRequest {
     private LocalDateTime eventDate;
     private Boolean paid;
     private Long participantLimit;
+    private Boolean commentModeration;
     private Boolean requestModeration;
     private Location location;
 }

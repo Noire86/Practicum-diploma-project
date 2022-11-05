@@ -2,7 +2,6 @@ package ru.soular.ewm.main.compilation.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import ru.soular.ewm.main.client.service.StatsClient;
 import ru.soular.ewm.main.compilation.dao.CompilationDAO;
@@ -12,20 +11,27 @@ import ru.soular.ewm.main.compilation.model.Compilation;
 import ru.soular.ewm.main.event.dao.EventDAO;
 import ru.soular.ewm.main.event.dto.EventShortDto;
 import ru.soular.ewm.main.event.model.Event;
+import ru.soular.ewm.main.util.mapper.CustomModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Имплементация сервиса подборок для админского функционала
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     private final CompilationDAO compilationDAO;
-    private final ModelMapper mapper;
+    private final CustomModelMapper mapper;
     private final EventDAO eventDAO;
     private final StatsClient statsClient;
 
+    /**
+     * Создание новой компиляции
+     */
     @Override
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         Compilation compilation = mapper.map(newCompilationDto, Compilation.class);
@@ -45,12 +51,18 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
     }
 
+    /**
+     * Удаление компиляции
+     */
     @Override
     public void delete(Long compId) {
         log.info("Deleting compilation ID:{}", compId);
         if (compilationDAO.existsById(compId)) compilationDAO.deleteById(compId);
     }
 
+    /**
+     * Удаление компиляции
+     */
     @Override
     public void deleteEvent(Long compId, Long eventId) {
         Compilation comp = compilationDAO.findEntityById(compId);
@@ -61,6 +73,9 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         compilationDAO.save(comp);
     }
 
+    /**
+     * Добавление события в подборку
+     */
     @Override
     public void addEvent(Long compId, Long eventId) {
         Compilation comp = compilationDAO.findEntityById(compId);
@@ -71,11 +86,17 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         compilationDAO.save(comp);
     }
 
+    /**
+     * Открепление подборки
+     */
     @Override
     public void unpin(Long compId) {
         setPinned(compId, Boolean.FALSE);
     }
 
+    /**
+     * Закрепление подборки
+     */
     @Override
     public void pin(Long compId) {
         setPinned(compId, Boolean.TRUE);
